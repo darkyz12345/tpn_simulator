@@ -23,14 +23,28 @@ def calculate_probability(free_paths: np.ndarray, distance: float) -> dict:
     return {
         "N": N,
         "successes": int(successes),
-        "robability": float(probability),
+        "probability": float(probability),
         "standard_error": float(standard_error)
     }
 
-def simulate_free_path(N: int, sigma: float, distance: float, seed: int | None = None) -> dict:
+def simulate_free_path(
+    N: int,
+    sigma: float,
+    distance: float,
+    seed: int | None = None
+) -> dict:
     free_paths = generate_free_paths(N, sigma, seed)
+
     result = calculate_probability(free_paths, distance)
-    result['analytical_probability'] = analytical_probability(sigma, distance)
-    result["absolute_error"] = abs(result["robability"] - result["analytical_probability"])
+
+    result["analytical_probability"] = analytical_probability(
+        sigma, distance
+    )
+
+    result["absolute_error"] = abs(
+        result["probability"] - result["analytical_probability"]
+    )
+
     result["free_paths"] = free_paths
+
     return result
